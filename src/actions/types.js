@@ -1,0 +1,2 @@
+export const GET_CONTACTS = "GET_CONTACTS";
+export const CONTACT_SEARCHING = "CONTACT_SEARCHING";
