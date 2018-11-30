@@ -1,13 +1,21 @@
-const initializeState = function() {
-  return {
+// const initializeState = function() {
+//   return {
+//     details: {},
+//     searching: false,
+//     repos: {},
+//     match: false
+//   };
+// };
+
+const UserReducer = (
+  state = {
     details: {},
     searching: false,
     repos: {},
     match: false
-  };
-};
-
-const UserReducer = (state = initializeState(), action) => {
+  },
+  action
+) => {
   switch (action.type) {
     case "CONTACT_SEARCHING": {
       return {
