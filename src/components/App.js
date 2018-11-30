@@ -229,6 +229,10 @@ const I = styled.i`
 
     transition: all 200ms ease-in-out;
   }
+
+  @media only screen and (max-width: 959px) {
+    padding-right: 2rem;
+  }
 `;
 
 class App extends Component {

@@ -148,6 +148,9 @@ const RepoContainer = styled.div`
   @media only screen and (max-width: 959px) {
     margin-top: 1rem;
     margin-bottom: 1rem;
+
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 `;
 

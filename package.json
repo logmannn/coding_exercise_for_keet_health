@@ -2,11 +2,10 @@
   "name": "reduxing",
   "version": "0.1.0",
   "jest": {
-    "verbose": true,
-    "setupTestFrameworkScriptFile": "<rootDir>__tests__/setup/setupEnzyme.js",
-    "testPathIgnorePatterns": [
-      "<rootDir>/__tests__/setup/"
-    ]
+    "transform": {
+      "^.+\\.jsx$": "babel-jest",
+      "^.+\\.js$": "babel-jest"
+    }
   },
   "private": true,
   "dependencies": {
