@@ -182,6 +182,13 @@ const Sort = styled.span`
   }
 `;
 
+const Nothing = styled.div`
+  color: #3e505a;
+
+  font-size: 35px;
+  font-weight: bold;
+`;
+
 class Results extends Component {
   constructor(props) {
     super(props);
@@ -208,7 +215,8 @@ class Results extends Component {
   };
 
   render() {
-    const { searching, details } = this.props.user;
+    console.log(this.props);
+    const { searching, details, match } = this.props.user;
     const { searchText, sorting } = this.state;
 
     let currentRepos = this.props.user.repos;
@@ -256,9 +264,11 @@ class Results extends Component {
         </Top>
         <ResultsFor>
           <ResultsForText>
-            {searching ? "Searching" : `Result for: ${details.login}`}
+            {searching
+              ? "Searching"
+              : `Result for: ${this.props.match.params.search}`}
           </ResultsForText>
-          {!searching && (
+          {!searching && match && (
             <a href={details.html_url}>
               <ProfilePicture src={details.avatar_url} alt="profile" />
             </a>
@@ -269,7 +279,7 @@ class Results extends Component {
         </ResultsFor>
         <RepoContainer id="results">
           <RepoDiv>
-            {!searching && (
+            {!searching && match && (
               <Sortables>
                 Sort by:{" "}
                 <Sort
@@ -306,6 +316,7 @@ class Results extends Component {
                 updated_at={repo.updated_at}
               />
             ))}
+            {!match && <Nothing>Nothing Found</Nothing>}
           </RepoDiv>
         </RepoContainer>
       </>

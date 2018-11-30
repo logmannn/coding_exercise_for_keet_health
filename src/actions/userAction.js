@@ -10,6 +10,16 @@ export const getUser = username => dispatch => {
       let allRepos = [];
       let amountofPages = Math.ceil(res.data.public_repos / 100);
 
+      let match = false;
+      if (res.data.public_repos === 0) {
+        dispatch({
+          type: GET_CONTACTS,
+          payload: {},
+          repos: [],
+          match
+        });
+      }
+
       for (let i = 1; i < amountofPages + 1; i++) {
         axios
           .get(
@@ -20,7 +30,8 @@ export const getUser = username => dispatch => {
             dispatch({
               type: GET_CONTACTS,
               payload: res.data,
-              repos: allRepos
+              repos: allRepos,
+              match: true
             });
           });
       }
@@ -28,7 +39,9 @@ export const getUser = username => dispatch => {
     .catch(err => {
       dispatch({
         type: GET_CONTACTS,
-        payload: {}
+        payload: {},
+        repos: [],
+        match: false
       });
     });
 };

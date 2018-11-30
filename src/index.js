@@ -8,7 +8,7 @@ import { Provider } from "react-redux"; //redux bindings for react
 import thunk from "redux-thunk"; //middleware that allows us to use promises in actions (async actions)
 import { createStore, applyMiddleware, compose } from "redux"; //allows us to create the store and middleware
 
-import reducers from "./reducers/index.js";
+import reducers from "./reducers/index";
 
 import "./index.css";
 import App from "./components/App";

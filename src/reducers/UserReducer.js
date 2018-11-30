@@ -2,7 +2,8 @@ const initializeState = function() {
   return {
     details: {},
     searching: false,
-    repos: {}
+    repos: {},
+    match: false
   };
 };
 
@@ -19,7 +20,8 @@ const UserReducer = (state = initializeState(), action) => {
         ...state,
         details: action.payload,
         repos: action.repos,
-        searching: false
+        searching: false,
+        match: action.match
       };
     }
     default:
