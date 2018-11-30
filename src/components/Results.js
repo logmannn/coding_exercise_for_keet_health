@@ -6,6 +6,8 @@ import { getUser } from "../actions/userAction";
 
 import AnchorLink from "react-anchor-link-smooth-scroll";
 
+import Repo from "./Repo";
+
 const ResultsFor = styled.div`
   background-image: url("https://www.keethealth.com/wp-content/uploads/2018/02/uncode-default-back-uai-2064x1147.jpeg");
   background-position: center center;
@@ -133,14 +135,65 @@ const ProfilePicture = styled.img`
   border: 2px solid #e95c95;
 `;
 
+const RepoContainer = styled.div`
+  display: flex;
+
+  justify-content: center;
+
+  margin-left: 5.6rem;
+  margin-right: 5.6rem;
+
+  overflow: hidden;
+
+  @media only screen and (max-width: 959px) {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+`;
+
+const RepoDiv = styled.div`
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+
+  max-width: 1200px;
+  width: 100%;
+
+  @media only screen and (max-width: 959px) {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+`;
+
+const Sortables = styled.div`
+  margin-bottom: 2rem;
+
+  font-size: 1rem;
+
+  color: #777777;
+`;
+
+const Sort = styled.span`
+  transition: all 200ms ease-in-out;
+
+  cursor: pointer;
+
+  &:hover {
+    color: #e95c95;
+  }
+`;
+
 class Results extends Component {
   constructor(props) {
     super(props);
-    this.state = { searchText: "" };
+    this.state = { searchText: "", sorting: "" };
   }
 
+  getUserInfo = search => {
+    this.props.getUser(search);
+  };
+
   componentDidMount() {
-    this.props.getUser(this.props.match.params.search);
+    this.getUserInfo(this.props.match.params.search);
   }
 
   onChange = e => {
@@ -149,16 +202,37 @@ class Results extends Component {
 
   handleKeyPress = e => {
     if (e.key === "Enter" && this.state.searchText !== "") {
-      this.props.getUser(this.state.searchText);
+      this.getUserInfo(this.state.searchText);
+      this.props.history.push(`/search/${this.state.searchText}`);
     }
   };
 
   render() {
     const { searching, details } = this.props.user;
-    const { searchText } = this.state;
+    const { searchText, sorting } = this.state;
 
-    if (!searching) {
-      console.log(this.props.user.details.avatar_url);
+    let currentRepos = this.props.user.repos;
+
+    if (sorting === "created") {
+      currentRepos = [].slice
+        .call(this.state.repos)
+        .sort((a, b) => {
+          return (
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          );
+        })
+        .reverse();
+    }
+
+    if (sorting === "updated") {
+      currentRepos = [].slice
+        .call(this.state.repos)
+        .sort((a, b) => {
+          return (
+            new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()
+          );
+        })
+        .reverse();
     }
 
     return (
@@ -184,14 +258,56 @@ class Results extends Component {
           <ResultsForText>
             {searching ? "Searching" : `Result for: ${details.login}`}
           </ResultsForText>
-          <a href={details.html_url}>
-            <ProfilePicture src={details.avatar_url} alt="profile" />
-          </a>
+          {!searching && (
+            <a href={details.html_url}>
+              <ProfilePicture src={details.avatar_url} alt="profile" />
+            </a>
+          )}
           <Down href="#results">
             <i className="fa fa-angle-down" />
           </Down>
         </ResultsFor>
-        <div id="results">test</div>
+        <RepoContainer id="results">
+          <RepoDiv>
+            {!searching && (
+              <Sortables>
+                Sort by:{" "}
+                <Sort
+                  onClick={() =>
+                    this.setState({
+                      sorting: "created",
+                      repos: this.props.user.repos
+                    })
+                  }
+                >
+                  Recently Created
+                </Sort>{" "}
+                |{" "}
+                <Sort
+                  onClick={() =>
+                    this.setState({
+                      sorting: "updated",
+                      repos: this.props.user.repos
+                    })
+                  }
+                >
+                  Recently Modified
+                </Sort>
+              </Sortables>
+            )}
+            {Array.from(currentRepos).map((repo, i) => (
+              <Repo
+                key={i}
+                title={repo.name}
+                description={repo.description}
+                url={repo.url}
+                fork={repo.fork}
+                created_at={repo.created_at}
+                updated_at={repo.updated_at}
+              />
+            ))}
+          </RepoDiv>
+        </RepoContainer>
       </>
     );
   }
