@@ -313,7 +313,7 @@ class Results extends Component {
                 key={i}
                 title={repo.name}
                 description={repo.description}
-                url={repo.url}
+                url={repo.html_url}
                 fork={repo.fork}
                 created_at={repo.created_at}
                 updated_at={repo.updated_at}
